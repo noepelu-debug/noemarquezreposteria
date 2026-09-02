@@ -1,0 +1,1594 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, shrink-to-fit=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="apple-mobile-web-app-title" content="Noe Repostería">
+    <meta name="theme-color" content="#fff5f7">
+    <title>Noe Márquez Repostería Creativa</title>
+    
+    <link rel="manifest" href="manifest.json">
+    <link rel="apple-touch-icon" href="icon-192.png">
+
+    <!-- Fonts & FontAwesome -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,600;0,700;1,400&family=Plus+Jakarta+Sans:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    
+    <!-- Chart.js for Dashboard Analytics -->
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+
+    <style>
+        :root {
+            --bg-main: #fffafc;
+            --pink-soft: #fce4ec;
+            --pink-accent: #f48fb1;
+            --pink-deep: #d81b60;
+            --cream: #fff9f0;
+            --gold: #d4af37;
+            --text-main: #4a3b40;
+            --text-muted: #8c7b80;
+            --white: #ffffff;
+            --border-color: #f8bbd0;
+            --shadow: 0 4px 18px rgba(216, 27, 96, 0.08);
+            --radius-lg: 18px;
+            --radius-sm: 10px;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-main);
+            color: var(--text-main);
+            padding-bottom: 90px;
+            overflow-x: hidden;
+        }
+
+        h1, h2, h3, .brand-font {
+            font-family: 'Playfair Display', serif;
+        }
+
+        /* HEADER */
+        header {
+            background: linear-gradient(135deg, #fff0f5 0%, #fce4ec 100%);
+            padding: 24px 20px 18px;
+            border-bottom: 2px solid #f8bbd0;
+            text-align: center;
+            position: sticky;
+            top: 0;
+            z-index: 100;
+            box-shadow: 0 2px 10px rgba(0,0,0,0.03);
+        }
+
+        header h1 {
+            color: var(--pink-deep);
+            font-size: 1.5rem;
+            font-weight: 700;
+            letter-spacing: -0.3px;
+        }
+
+        header p {
+            color: var(--text-muted);
+            font-size: 0.85rem;
+            margin-top: 2px;
+            font-style: italic;
+        }
+
+        /* NAVIGATION BAR */
+        .bottom-nav {
+            position: fixed;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: var(--white);
+            display: flex;
+            justify-content: space-around;
+            padding: 8px 0 (10px + env(safe-area-inset-bottom));
+            border-top: 1px solid var(--pink-soft);
+            box-shadow: 0 -4px 15px rgba(0,0,0,0.04);
+            z-index: 1000;
+        }
+
+        .nav-item {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: var(--text-muted);
+            font-size: 0.72rem;
+            font-weight: 600;
+            text-decoration: none;
+            padding: 6px 12px;
+            border-radius: 12px;
+            transition: all 0.2s ease;
+        }
+
+        .nav-item i {
+            font-size: 1.25rem;
+            margin-bottom: 3px;
+        }
+
+        .nav-item.active {
+            color: var(--pink-deep);
+            background-color: var(--pink-soft);
+        }
+
+        /* CONTAINER */
+        .container {
+            padding: 18px;
+            max-width: 768px;
+            margin: 0 auto;
+        }
+
+        .view-section {
+            display: none;
+            animation: fadeIn 0.25s ease-in-out;
+        }
+
+        .view-section.active {
+            display: block;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(6px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* CARDS */
+        .card {
+            background: var(--white);
+            border-radius: var(--radius-lg);
+            padding: 18px;
+            margin-bottom: 16px;
+            border: 1px solid rgba(244, 143, 177, 0.2);
+            box-shadow: var(--shadow);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 14px;
+        }
+
+        .card-title {
+            font-size: 1.15rem;
+            color: var(--pink-deep);
+            font-weight: 700;
+        }
+
+        /* GRID / QUICK ACCESS */
+        .grid-menu {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 12px;
+            margin-top: 15px;
+        }
+
+        .menu-btn {
+            background: var(--white);
+            border: 1px solid var(--pink-soft);
+            border-radius: var(--radius-lg);
+            padding: 18px 14px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            box-shadow: var(--shadow);
+            cursor: pointer;
+            transition: transform 0.15s ease;
+        }
+
+        .menu-btn:active {
+            transform: scale(0.97);
+            background-color: var(--pink-soft);
+        }
+
+        .menu-btn i {
+            font-size: 2rem;
+            color: var(--pink-deep);
+            margin-bottom: 8px;
+        }
+
+        .menu-btn span {
+            font-weight: 700;
+            font-size: 0.9rem;
+            color: var(--text-main);
+        }
+
+        /* BUTTONS */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+            width: 100%;
+            padding: 14px 20px;
+            border-radius: 30px;
+            border: none;
+            font-weight: 700;
+            font-size: 0.95rem;
+            cursor: pointer;
+            transition: opacity 0.2s ease, transform 0.1s ease;
+        }
+
+        .btn:active {
+            transform: scale(0.98);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #f48fb1 0%, #d81b60 100%);
+            color: var(--white);
+            box-shadow: 0 4px 14px rgba(216, 27, 96, 0.25);
+        }
+
+        .btn-secondary {
+            background: var(--cream);
+            color: var(--pink-deep);
+            border: 1px solid var(--gold);
+        }
+
+        .btn-outline {
+            background: transparent;
+            color: var(--pink-deep);
+            border: 1.5px solid var(--pink-deep);
+        }
+
+        .btn-whatsapp {
+            background-color: #25d366;
+            color: white;
+            padding: 8px 14px;
+            border-radius: 20px;
+            text-decoration: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        /* FORMS & INPUTS */
+        .form-group {
+            margin-bottom: 14px;
+        }
+
+        .form-group label {
+            display: block;
+            font-size: 0.85rem;
+            font-weight: 600;
+            color: var(--text-main);
+            margin-bottom: 5px;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 12px 14px;
+            border: 1.5px solid var(--pink-soft);
+            border-radius: var(--radius-sm);
+            font-size: 0.95rem;
+            background-color: #fff;
+            color: var(--text-main);
+            outline: none;
+            transition: border-color 0.2s ease;
+        }
+
+        .form-control:focus {
+            border-color: var(--pink-deep);
+        }
+
+        .form-row {
+            display: flex;
+            gap: 10px;
+        }
+
+        .form-row .form-group {
+            flex: 1;
+        }
+
+        /* BADGES */
+        .badge {
+            padding: 4px 10px;
+            border-radius: 20px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            text-transform: uppercase;
+        }
+
+        .badge-pendiente { background-color: #fff9c4; color: #f57f17; }
+        .badge-preparacion { background-color: #e1f5fe; color: #0288d1; }
+        .badge-listo { background-color: #f3e5f5; color: #7b1fa2; }
+        .badge-entregado { background-color: #e8f5e9; color: #388e3c; }
+        .badge-cancelado { background-color: #ffebee; color: #c62828; }
+        .badge-warning { background-color: #fff3e0; color: #e65100; border: 1px solid #ffe0b2; }
+
+        /* MODAL */
+        .modal-overlay {
+            position: fixed;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: rgba(0,0,0,0.4);
+            display: none;
+            justify-content: center;
+            align-items: flex-end;
+            z-index: 2000;
+            backdrop-filter: blur(3px);
+        }
+
+        .modal-overlay.active {
+            display: flex;
+        }
+
+        .modal-content {
+            background: var(--white);
+            width: 100%;
+            max-width: 600px;
+            max-height: 88vh;
+            border-top-left-radius: 24px;
+            border-top-right-radius: 24px;
+            padding: 22px;
+            overflow-y: auto;
+            animation: slideUp 0.3s ease-out;
+        }
+
+        @keyframes slideUp {
+            from { transform: translateY(100%); }
+            to { transform: translateY(0); }
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 18px;
+            border-bottom: 1px solid var(--pink-soft);
+            padding-bottom: 10px;
+        }
+
+        .close-modal {
+            background: none;
+            border: none;
+            font-size: 1.5rem;
+            color: var(--text-muted);
+            cursor: pointer;
+        }
+
+        /* DASHBOARD METRICS */
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 10px;
+            margin-bottom: 16px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #ffffff 0%, #fff9f0 100%);
+            border: 1px solid var(--gold);
+            padding: 14px;
+            border-radius: var(--radius-sm);
+            text-align: center;
+        }
+
+        .stat-card .val {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--pink-deep);
+            margin-top: 4px;
+        }
+
+        .stat-card .lbl {
+            font-size: 0.75rem;
+            color: var(--text-muted);
+            font-weight: 600;
+        }
+
+        /* LIST ITEMS */
+        .list-item {
+            background: var(--white);
+            border: 1px solid var(--pink-soft);
+            border-radius: var(--radius-sm);
+            padding: 14px;
+            margin-bottom: 10px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .list-item-title {
+            font-weight: 700;
+            color: var(--text-main);
+            font-size: 0.95rem;
+        }
+
+        .list-item-sub {
+            font-size: 0.8rem;
+            color: var(--text-muted);
+            margin-top: 3px;
+        }
+
+        /* CALENDAR STYLES */
+        .calendar-grid {
+            display: grid;
+            grid-template-columns: repeat(7, 1fr);
+            gap: 4px;
+            text-align: center;
+            margin-top: 10px;
+        }
+
+        .cal-header {
+            font-weight: 700;
+            font-size: 0.75rem;
+            color: var(--pink-deep);
+            padding: 6px 0;
+        }
+
+        .cal-day {
+            padding: 10px 2px;
+            border-radius: 8px;
+            background-color: var(--bg-main);
+            font-size: 0.85rem;
+            cursor: pointer;
+            min-height: 44px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .cal-day.has-orders {
+            background-color: var(--pink-soft);
+            border: 1px solid var(--pink-accent);
+            font-weight: 700;
+            color: var(--pink-deep);
+        }
+
+        .cal-day .dot {
+            width: 5px;
+            height: 5px;
+            background-color: var(--pink-deep);
+            border-radius: 50%;
+            margin-top: 2px;
+        }
+
+        .cal-month-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 10px;
+        }
+
+        /* TAB CONTROLS */
+        .tab-bar {
+            display: flex;
+            gap: 8px;
+            overflow-x: auto;
+            padding-bottom: 8px;
+            margin-bottom: 14px;
+        }
+
+        .tab-btn {
+            padding: 8px 16px;
+            border-radius: 20px;
+            background: var(--pink-soft);
+            color: var(--pink-deep);
+            border: none;
+            font-size: 0.82rem;
+            font-weight: 600;
+            white-space: nowrap;
+            cursor: pointer;
+        }
+
+        .tab-btn.active {
+            background: var(--pink-deep);
+            color: var(--white);
+        }
+
+        .img-preview {
+            width: 100%;
+            height: 140px;
+            object-fit: cover;
+            border-radius: var(--radius-sm);
+            margin-top: 8px;
+            background-color: var(--pink-soft);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: var(--pink-deep);
+        }
+    </style>
+</head>
+<body>
+
+    <!-- APP HEADER -->
+    <header>
+        <h1 class="brand-font">Noe Márquez</h1>
+        <p>Repostería Creativa & Repostera Artesanal</p>
+    </header>
+
+    <div class="container">
+
+        <!-- 1. DASHBOARD / PANTALLA DE INICIO -->
+        <section id="view-home" class="view-section active">
+            <div class="card" style="background: linear-gradient(135deg, #fff 0%, #fff9f0 100%);">
+                <div class="card-header" style="margin-bottom: 6px;">
+                    <span class="card-title" style="font-size: 1.2rem;">✨ ¡Hola Noe!</span>
+                    <i class="fa-solid fa-wand-magic-sparkles" style="color: var(--gold); font-size: 1.2rem;"></i>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted);">Resumen de tu emprendimiento hoy</p>
+            </div>
+
+            <div class="stats-grid">
+                <div class="stat-card">
+                    <div class="lbl">Ventas del Mes</div>
+                    <div class="val" id="dash-ventas">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">Ganancia Estimada</div>
+                    <div class="val" id="dash-ganancia">$0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">Pedidos Pendientes</div>
+                    <div class="val" id="dash-pendientes">0</div>
+                </div>
+                <div class="stat-card">
+                    <div class="lbl">Saldo por Cobrar</div>
+                    <div class="val" id="dash-saldo">$0</div>
+                </div>
+            </div>
+
+            <!-- BOTONES ACCESO RÁPIDO PANTALLA DE INICIO -->
+            <div class="grid-menu">
+                <div class="menu-btn" onclick="switchView('productos')">
+                    <i class="fa-solid fa-cake-candles"></i>
+                    <span>Productos</span>
+                </div>
+                <div class="menu-btn" onclick="switchView('pedidos')">
+                    <i class="fa-solid fa-box-open"></i>
+                    <span>Pedidos</span>
+                </div>
+                <div class="menu-btn" onclick="switchView('costos')">
+                    <i class="fa-solid fa-calculator"></i>
+                    <span>Costos & Precios</span>
+                </div>
+                <div class="menu-btn" onclick="switchView('recetas')">
+                    <i class="fa-solid fa-book-bookmark"></i>
+                    <span>Recetas</span>
+                </div>
+                <div class="menu-btn" onclick="switchView('insumos')">
+                    <i class="fa-solid fa-cubes-stacked"></i>
+                    <span>Insumos</span>
+                </div>
+                <div class="menu-btn" onclick="switchView('clientes')">
+                    <i class="fa-solid fa-users"></i>
+                    <span>Clientes</span>
+                </div>
+                <div class="menu-btn" onclick="switchView('ganancias')">
+                    <i class="fa-solid fa-chart-line"></i>
+                    <span>Ganancias</span>
+                </div>
+                <div class="menu-btn" onclick="switchView('configuracion')">
+                    <i class="fa-solid fa-gear"></i>
+                    <span>Configuración</span>
+                </div>
+            </div>
+
+            <div class="card" style="margin-top: 18px;">
+                <div class="card-header">
+                    <span class="card-title"><i class="fa-regular fa-clock"></i> Próximos Pedidos</span>
+                </div>
+                <div id="dash-prox-pedidos">
+                    <!-- Dynamic rendering -->
+                </div>
+            </div>
+        </section>
+
+        <!-- 2. PRODUCTOS -->
+        <section id="view-productos" class="view-section">
+            <button class="btn btn-primary" style="margin-bottom: 16px;" onclick="openProductModal()">
+                <i class="fa-solid fa-plus"></i> AGREGAR PRODUCTO
+            </button>
+
+            <div class="tab-bar" id="prod-category-tabs">
+                <button class="tab-btn active" onclick="filterProducts('Todos')">Todos</button>
+                <button class="tab-btn" onclick="filterProducts('Tortas')">Tortas</button>
+                <button class="tab-btn" onclick="filterProducts('Mini cakes')">Mini cakes</button>
+                <button class="tab-btn" onclick="filterProducts('Cheesecakes')">Cheesecakes</button>
+                <button class="tab-btn" onclick="filterProducts('Box')">Box</button>
+            </div>
+
+            <div id="lista-productos">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- 3. CALCULADORA DE COSTOS & PRECIOS -->
+        <section id="view-costos" class="view-section">
+            <div class="card">
+                <div class="card-header">
+                    <span class="card-title">Calculadora de Costos & Precio Sugerido</span>
+                </div>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 14px;">Ingresá tus insumos y packaging para obtener el costo total exacto.</p>
+
+                <form id="cost-calc-form" onsubmit="event.preventDefault(); calculateTotalCost();">
+                    <div class="form-group">
+                        <label>Nombre del Producto / Receta</label>
+                        <input type="text" id="calc-prod-name" class="form-control" placeholder="Ej: Mini Cake Cumpleaños">
+                    </div>
+
+                    <h4 style="font-size: 0.9rem; color: var(--pink-deep); margin: 12px 0 6px;">1. Ingredientes & Productos</h4>
+                    <div id="calc-ingredients-list">
+                        <!-- Dynamic Ingredient Rows -->
+                    </div>
+                    <button type="button" class="btn btn-outline" style="padding: 6px 12px; font-size: 0.8rem; margin-bottom: 12px;" onclick="addCalcIngredientRow()">
+                        + Agregar Ingrediente
+                    </button>
+
+                    <h4 style="font-size: 0.9rem; color: var(--pink-deep); margin: 12px 0 6px;">2. Packaging & Decoración</h4>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Caja / Base ($)</label>
+                            <input type="number" id="cost-packaging" class="form-control calc-trigger" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Flores / Adornos ($)</label>
+                            <input type="number" id="cost-decoracion" class="form-control calc-trigger" value="0">
+                        </div>
+                    </div>
+
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Etiquetas / Papel ($)</label>
+                            <input type="number" id="cost-etiquetas" class="form-control calc-trigger" value="0">
+                        </div>
+                        <div class="form-group">
+                            <label>Otros Gastos ($)</label>
+                            <input type="number" id="cost-otros" class="form-control calc-trigger" value="0">
+                        </div>
+                    </div>
+
+                    <div style="background: var(--cream); border: 1px dashed var(--gold); padding: 14px; border-radius: 12px; margin: 16px 0;">
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 6px;">
+                            <span>Costo Total Elaboración:</span>
+                            <strong id="res-costo-total" style="color: var(--pink-deep); font-size: 1.1rem;">$0</strong>
+                        </div>
+
+                        <div class="form-group" style="margin-top: 10px;">
+                            <label>% Margen Ganancia Deseado</label>
+                            <input type="number" id="calc-margen-pct" class="form-control calc-trigger" value="100">
+                        </div>
+
+                        <div style="display: flex; justify-content: space-between; margin-bottom: 4px;">
+                            <span>Precio Sugerido:</span>
+                            <strong id="res-precio-sugerido" style="color: #2e7d32; font-size: 1.1rem;">$0</strong>
+                        </div>
+                        <div style="display: flex; justify-content: space-between;">
+                            <span>Ganancia Estimada:</span>
+                            <strong id="res-ganancia-estimada" style="color: var(--pink-deep);">$0</strong>
+                        </div>
+                    </div>
+
+                    <button type="button" class="btn btn-primary" onclick="saveCostCalculationAsProduct()">
+                        <i class="fa-solid fa-floppy-disk"></i> Guardar como Producto
+                    </button>
+                </form>
+            </div>
+        </section>
+
+        <!-- 4. RECETAS & ESCALADOR -->
+        <section id="view-recetas" class="view-section">
+            <button class="btn btn-primary" style="margin-bottom: 16px;" onclick="openRecipeModal()">
+                <i class="fa-solid fa-plus"></i> NUEVA RECETA
+            </button>
+
+            <div class="card" style="margin-bottom: 16px;">
+                <div class="card-header" style="margin-bottom: 8px;">
+                    <span class="card-title" style="font-size: 1rem;"><i class="fa-solid fa-calculator"></i> Scaler: Calculadora de Recetas</span>
+                </div>
+                <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 10px;">Ajusta las cantidades automáticamente según el rinde o porciones.</p>
+                <div class="form-row">
+                    <div class="form-group">
+                        <label>Rinde Original</label>
+                        <input type="number" id="scale-orig" class="form-control" value="10" placeholder="Ej: 10 porciones">
+                    </div>
+                    <div class="form-group">
+                        <label>Rinde Deseado</label>
+                        <input type="number" id="scale-target" class="form-control" value="25" placeholder="Ej: 25 porciones">
+                    </div>
+                </div>
+                <button class="btn btn-secondary" style="padding: 8px;" onclick="applyRecipeScaler()">
+                    Recalcular Proporciones
+                </button>
+            </div>
+
+            <div id="lista-recetas">
+                <!-- Dynamic content -->
+            </div>
+        </section>
+
+        <!-- 5. PEDIDOS & CALENDARIO -->
+        <section id="view-pedidos" class="view-section">
+            <button class="btn btn-primary" style="margin-bottom: 16px;" onclick="openOrderModal()">
+                <i class="fa-solid fa-plus"></i> REGISTRAR NUEVO PEDIDO
+            </button>
+
+            <!-- Mini Calendario -->
+            <div class="card">
+                <div class="cal-month-header">
+                    <button class="btn btn-outline" style="width: auto; padding: 4px 12px;" onclick="changeMonth(-1)"><i class="fa-solid fa-chevron-left"></i></button>
+                    <span id="cal-month-title" class="brand-font" style="font-weight: 700; color: var(--pink-deep);">Septiembre 2026</span>
+                    <button class="btn btn-outline" style="width: auto; padding: 4px 12px;" onclick="changeMonth(1)"><i class="fa-solid fa-chevron-right"></i></button>
+                </div>
+                <div class="calendar-grid" id="calendar-grid">
+                    <!-- Calendar dynamic JS -->
+                </div>
+            </div>
+
+            <h3 style="font-size: 1rem; color: var(--pink-deep); margin: 16px 0 10px;">Listado de Pedidos</h3>
+            <div id="lista-pedidos">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- 6. CLIENTES -->
+        <section id="view-clientes" class="view-section">
+            <button class="btn btn-primary" style="margin-bottom: 16px;" onclick="openClientModal()">
+                <i class="fa-solid fa-user-plus"></i> AGREGAR CLIENTE
+            </button>
+            <div id="lista-clientes">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- 7. INSUMOS & STOCK -->
+        <section id="view-insumos" class="view-section">
+            <button class="btn btn-primary" style="margin-bottom: 16px;" onclick="openInsumoModal()">
+                <i class="fa-solid fa-plus"></i> AGREGAR INSUMO
+            </button>
+            <div id="lista-insumos">
+                <!-- Dynamic Content -->
+            </div>
+        </section>
+
+        <!-- 8. GANANCIAS & REPORTES -->
+        <section id="view-ganancias" class="view-section">
+            <div class="card">
+                <span class="card-title">Resumen de Ventas y Ganancias</span>
+                <div style="height: 220px; margin-top: 15px;">
+                    <canvas id="chartGanancias"></canvas>
+                </div>
+            </div>
+
+            <div class="card">
+                <span class="card-title">Métricas Clave</span>
+                <div style="margin-top: 10px; font-size: 0.9rem;">
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--pink-soft);">
+                        <span>Total Pedidos Registrados:</span>
+                        <strong id="stat-total-pedidos">0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0; border-bottom: 1px solid var(--pink-soft);">
+                        <span>Pedidos Entregados:</span>
+                        <strong id="stat-pedidos-entregados">0</strong>
+                    </div>
+                    <div style="display: flex; justify-content: space-between; padding: 8px 0;">
+                        <span>Efectivo Pendiente de Cobro:</span>
+                        <strong id="stat-pendiente-cobro" style="color: var(--pink-deep);">$0</strong>
+                    </div>
+                </div>
+            </div>
+        </section>
+
+        <!-- 9. CONFIGURACIÓN Y BACKUP -->
+        <section id="view-configuracion" class="view-section">
+            <div class="card">
+                <span class="card-title">💾 Copia de Seguridad & Datos</span>
+                <p style="font-size: 0.85rem; color: var(--text-muted); margin: 10px 0 16px;">
+                    Tus datos se guardan de forma 100% privada y segura dentro de Safari en tu iPhone. Podés descargar un archivo de copia de seguridad cuando desees.
+                </p>
+
+                <button class="btn btn-secondary" style="margin-bottom: 12px;" onclick="exportBackupData()">
+                    <i class="fa-solid fa-download"></i> EXPORTAR BACKUP (JSON)
+                </button>
+
+                <label class="btn btn-outline" style="cursor: pointer; text-align: center;">
+                    <i class="fa-solid fa-upload"></i> IMPORTAR BACKUP (JSON)
+                    <input type="file" id="import-file" accept=".json" style="display: none;" onchange="importBackupData(event)">
+                </label>
+            </div>
+
+            <div class="card">
+                <span class="card-title">📲 Instalación en iPhone</span>
+                <ol style="font-size: 0.85rem; color: var(--text-main); margin-left: 18px; margin-top: 10px; line-height: 1.6;">
+                    <li>Abre esta web desde <strong>Safari</strong> en tu iPhone.</li>
+                    <li>Toca el botón <strong>Compartir</strong> (el cuadrado con la flecha hacia arriba).</li>
+                    <li>Selecciona <strong>"Agregar a inicio"</strong>.</li>
+                    <li>¡Listo! Tendrás el icono de Noe Repostería en tu pantalla de inicio como una App nativa.</li>
+                </ol>
+            </div>
+        </section>
+
+    </div>
+
+    <!-- BOTTOM NAVBAR -->
+    <nav class="bottom-nav">
+        <a href="#" class="nav-item active" onclick="switchView('home', this)">
+            <i class="fa-solid fa-house"></i>
+            <span>Inicio</span>
+        </a>
+        <a href="#" class="nav-item" onclick="switchView('pedidos', this)">
+            <i class="fa-solid fa-box-open"></i>
+            <span>Pedidos</span>
+        </a>
+        <a href="#" class="nav-item" onclick="switchView('productos', this)">
+            <i class="fa-solid fa-cake-candles"></i>
+            <span>Productos</span>
+        </a>
+        <a href="#" class="nav-item" onclick="switchView('costos', this)">
+            <i class="fa-solid fa-calculator"></i>
+            <span>Costos</span>
+        </a>
+        <a href="#" class="nav-item" onclick="switchView('recetas', this)">
+            <i class="fa-solid fa-book-bookmark"></i>
+            <span>Recetas</span>
+        </a>
+    </nav>
+
+    <!-- MODAL CONTAINER -->
+    <div class="modal-overlay" id="generic-modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h3 id="modal-title" class="brand-font" style="color: var(--pink-deep);">Título Modal</h3>
+                <button class="close-modal" onclick="closeModal()">&times;</button>
+            </div>
+            <div id="modal-body">
+                <!-- Inner Modal Form Content -->
+            </div>
+        </div>
+    </div>
+
+    <!-- JAVASCRIPT APPLICATION CORE -->
+    <script>
+        // INITIAL DEMO DATA FOR PRELOAD
+        const initialData = {
+            productos: [
+                { id: 1, nombre: 'Mini Cake', categoria: 'Mini cakes', costo: 3700, precio: 8000, ganancia: 4300, pct: 53.75, desc: 'Mini cake decorada estilo boutique' },
+                { id: 2, nombre: 'Cheesecake', categoria: 'Cheesecakes', costo: 12000, precio: 25000, ganancia: 13000, pct: 52.00, desc: 'Cheesecake artesanal con frutos rojos' },
+                { id: 3, nombre: 'Box Día de la Madre', categoria: 'Box', costo: 15000, precio: 45000, ganancia: 30000, pct: 66.67, desc: 'Box completa con mini cake y macarons' }
+            ],
+            pedidos: [
+                { id: 101, cliente: 'María González', telefono: '5493512345678', fecha: '2026-09-05', hora: '17:00', productos: 'Mini Cake', total: 8000, sena: 4000, saldo: 4000, pago: 'Transferencia', estado: 'Pendiente', notas: 'Temática flores rosa' },
+                { id: 102, cliente: 'Laura Pérez', telefono: '5493519876543', fecha: '2026-09-03', hora: '18:30', productos: 'Cheesecake', total: 25000, sena: 25000, saldo: 0, pago: 'Efectivo', estado: 'En preparación', notas: 'Sin TACC' }
+            ],
+            clientes: [
+                { id: 1, nombre: 'María González', telefono: '5493512345678', instagram: '@mariagonzalez', notas: 'Cliente recurrente' },
+                { id: 2, nombre: 'Laura Pérez', telefono: '5493519876543', instagram: '@laura_perez', notas: 'Prefiere entregas a la tarde' }
+            ],
+            recetas: [
+                { id: 1, nombre: 'Bizcochuelo Vainilla Premium', categoria: 'Tortas', rinde: 10, ingredienteList: 'Harina 250g, Azúcar 200g, Manteca 150g, Huevos 3 u', pasoss: 'Batir manteca con azúcar, agregar huevos y alternar secos. Hornear 180°C por 45m.' }
+            ],
+            insumos: [
+                { id: 1, nombre: 'Harina 0000', categoria: 'Ingredientes', stock: 10, unidad: 'kg', minStock: 3, precio: 1200 },
+                { id: 2, nombre: 'Caja Boutique 20x20', categoria: 'Packaging', stock: 2, unidad: 'unidades', minStock: 5, precio: 950 }
+            ]
+        };
+
+        // LOCALSTORAGE PERSISTENCE ENGINE
+        function loadStorage(key) {
+            const data = localStorage.getItem('noe_reposteria_' + key);
+            return data ? JSON.parse(data) : initialData[key];
+        }
+
+        function saveStorage(key, data) {
+            localStorage.setItem('noe_reposteria_' + key, JSON.stringify(data));
+        }
+
+        let db = {
+            productos: loadStorage('productos'),
+            pedidos: loadStorage('pedidos'),
+            clientes: loadStorage('clientes'),
+            recetas: loadStorage('recetas'),
+            insumos: loadStorage('insumos')
+        };
+
+        let currentCalDate = new Date();
+
+        // ROUTING / VIEW SWITCHER
+        function switchView(viewName, navEl = null) {
+            document.querySelectorAll('.view-section').forEach(el => el.classList.remove('active'));
+            document.getElementById('view-' + viewName).classList.add('active');
+
+            if (navEl) {
+                document.querySelectorAll('.bottom-nav .nav-item').forEach(el => el.classList.remove('active'));
+                navEl.classList.add('active');
+            }
+
+            // Refresh view renderers
+            if (viewName === 'home') renderDashboard();
+            if (viewName === 'productos') renderProducts();
+            if (viewName === 'pedidos') { renderCalendar(); renderOrders(); }
+            if (viewName === 'clientes') renderClients();
+            if (viewName === 'recetas') renderRecipes();
+            if (viewName === 'insumos') renderInsumos();
+            if (viewName === 'ganancias') renderAnalytics();
+            
+            window.scrollTo(0, 0);
+        }
+
+        // RENDERERS
+        function renderDashboard() {
+            let totalVentas = db.pedidos.reduce((sum, p) => sum + Number(p.total), 0);
+            let totalSaldo = db.pedidos.reduce((sum, p) => sum + Number(p.saldo), 0);
+            let pendientesCount = db.pedidos.filter(p => p.estado !== 'Entregado' && p.estado !== 'Cancelado').length;
+            let totalGanancia = db.productos.reduce((sum, pr) => sum + Number(pr.ganancia), 0);
+
+            document.getElementById('dash-ventas').innerText = '$' + totalVentas.toLocaleString('es-AR');
+            document.getElementById('dash-ganancia').innerText = '$' + totalGanancia.toLocaleString('es-AR');
+            document.getElementById('dash-pendientes').innerText = pendientesCount;
+            document.getElementById('dash-saldo').innerText = '$' + totalSaldo.toLocaleString('es-AR');
+
+            const proxContainer = document.getElementById('dash-prox-pedidos');
+            proxContainer.innerHTML = '';
+            let proxList = [...db.pedidos].sort((a,b) => new Date(a.fecha) - new Date(b.fecha)).slice(0, 3);
+            
+            if (proxList.length === 0) {
+                proxContainer.innerHTML = '<p style="font-size:0.85rem; color:var(--text-muted);">No hay pedidos programados.</p>';
+            } else {
+                proxList.forEach(p => {
+                    proxContainer.innerHTML += `
+                        <div class="list-item">
+                            <div>
+                                <div class="list-item-title">${p.cliente} (${p.productos})</div>
+                                <div class="list-item-sub"><i class="fa-regular fa-calendar"></i> ${p.fecha} a las ${p.hora} hs</div>
+                            </div>
+                            <span class="badge badge-${p.estado.toLowerCase().replace(' ', '')}">${p.estado}</span>
+                        </div>
+                    `;
+                });
+            }
+        }
+
+        function renderProducts(filterCat = 'Todos') {
+            const list = document.getElementById('lista-productos');
+            list.innerHTML = '';
+            let items = db.productos;
+            if (filterCat !== 'Todos') items = items.filter(i => i.categoria === filterCat);
+
+            items.forEach(p => {
+                list.innerHTML += `
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">${p.nombre}</span>
+                            <span style="font-size: 0.8rem; background: var(--pink-soft); padding: 4px 8px; border-radius: 10px; color: var(--pink-deep); font-weight:600;">${p.categoria}</span>
+                        </div>
+                        <p style="font-size: 0.85rem; color: var(--text-muted); margin-bottom: 10px;">${p.desc || ''}</p>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.9rem; margin-bottom: 6px;">
+                            <span>Costo: <strong>$${Number(p.costo).toLocaleString('es-AR')}</strong></span>
+                            <span>Precio: <strong style="color: #2e7d32;">$${Number(p.precio).toLocaleString('es-AR')}</strong></span>
+                        </div>
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; background: var(--cream); padding: 8px 12px; border-radius: 8px;">
+                            <span>Ganancia: <strong style="color: var(--pink-deep);">$${Number(p.ganancia).toLocaleString('es-AR')}</strong></span>
+                            <span>Margen: <strong>${p.pct}%</strong></span>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        function filterProducts(cat) {
+            document.querySelectorAll('#prod-category-tabs .tab-btn').forEach(btn => btn.classList.remove('active'));
+            event.target.classList.add('active');
+            renderProducts(cat);
+        }
+
+        function renderOrders() {
+            const container = document.getElementById('lista-pedidos');
+            container.innerHTML = '';
+
+            db.pedidos.forEach(p => {
+                let badgeClass = 'badge-' + p.estado.toLowerCase().replace(' ', '');
+                let waMessage = encodeURIComponent(`Hola ${p.cliente} ❤️ Te confirmo tu pedido de ${p.productos} para el día ${p.fecha} a las ${p.hora}hs. El total es de $${p.total}. Abonado: $${p.sena} y resta abonar un saldo de $${p.saldo}.`);
+                let waUrl = `https://wa.me/${p.telefono}?text=${waMessage}`;
+
+                container.innerHTML += `
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">Pedido #${p.id} - ${p.cliente}</span>
+                            <span class="badge ${badgeClass}">${p.estado}</span>
+                        </div>
+                        <p style="font-size: 0.88rem; font-weight:600; margin-bottom: 4px;">🍰 ${p.productos}</p>
+                        <p style="font-size: 0.8rem; color: var(--text-muted); margin-bottom: 8px;">
+                            <i class="fa-regular fa-calendar"></i> Entrega: ${p.fecha} ${p.hora} hs
+                        </p>
+                        ${p.notas ? `<p style="font-size:0.8rem; background:#fff3e0; padding:6px 10px; border-radius:6px; margin-bottom:8px;">📝 ${p.notas}</p>` : ''}
+                        
+                        <div style="display: flex; justify-content: space-between; font-size: 0.85rem; margin-bottom: 10px; border-top: 1px dashed #f8bbd0; padding-top: 8px;">
+                            <span>Total: <strong>$${p.total}</strong></span>
+                            <span>Seña: <strong>$${p.sena}</strong></span>
+                            <span style="color: var(--pink-deep);">Saldo: <strong>$${p.saldo}</strong></span>
+                        </div>
+
+                        <div style="display: flex; gap: 8px; justify-content: space-between; align-items: center;">
+                            <a href="${waUrl}" target="_blank" class="btn-whatsapp">
+                                <i class="fa-brands fa-whatsapp"></i> Contactar
+                            </a>
+                            <button class="btn btn-outline" style="width:auto; padding: 6px 12px; font-size: 0.78rem;" onclick="changeOrderStatus(${p.id})">
+                                Cambiar Estado
+                            </button>
+                        </div>
+                    </div>
+                `;
+            });
+        }
+
+        // CALENDAR
+        function renderCalendar() {
+            const grid = document.getElementById('calendar-grid');
+            grid.innerHTML = '';
+            
+            const daysOfWeek = ['Dom', 'Lun', 'Mar', 'Mié', 'Jue', 'Vie', 'Sáb'];
+            daysOfWeek.forEach(d => {
+                grid.innerHTML += `<div class="cal-header">${d}</div>`;
+            });
+
+            const year = currentCalDate.getFullYear();
+            const month = currentCalDate.getMonth();
+            
+            document.getElementById('cal-month-title').innerText = new Intl.DateTimeFormat('es-AR', { month: 'long', year: 'numeric' }).format(currentCalDate);
+
+            const firstDay = new Date(year, month, 1).getDay();
+            const daysInMonth = new Date(year, month + 1, 0).getDate();
+
+            for (let i = 0; i < firstDay; i++) {
+                grid.innerHTML += `<div></div>`;
+            }
+
+            for (let day = 1; day <= daysInMonth; day++) {
+                let dateStr = `${year}-${String(month + 1).padStart(2, '0')}-${String(day).padStart(2, '0')}`;
+                let hasOrders = db.pedidos.some(p => p.fecha === dateStr);
+                
+                grid.innerHTML += `
+                    <div class="cal-day ${hasOrders ? 'has-orders' : ''}" onclick="filterOrdersByDate('${dateStr}')">
+                        ${day}
+                        ${hasOrders ? '<div class="dot"></div>' : ''}
+                    </div>
+                `;
+            }
+        }
+
+        function changeMonth(dir) {
+            currentCalDate.setMonth(currentCalDate.getMonth() + dir);
+            renderCalendar();
+        }
+
+        function filterOrdersByDate(dateStr) {
+            alert(`Pedidos para el día ${dateStr}:
+` + 
+                (db.pedidos.filter(p => p.fecha === dateStr).map(p => `- ${p.cliente}: ${p.productos} (${p.hora}hs)`).join('
+') || 'Sin entregas registradas.')
+            );
+        }
+
+        // RECIPES
+        function renderRecipes() {
+            const list = document.getElementById('lista-recetas');
+            list.innerHTML = '';
+
+            db.recetas.forEach(r => {
+                list.innerHTML += `
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">${r.nombre}</span>
+                            <span style="font-size:0.75rem; color:var(--text-muted);">Rinde: ${r.rinde} porciones</span>
+                        </div>
+                        <p style="font-size:0.85rem; font-weight:600; color:var(--pink-deep); margin-bottom:4px;">Ingredientes:</p>
+                        <p style="font-size:0.83rem; color:var(--text-main); margin-bottom:10px;">${r.ingredienteList}</p>
+                        <p style="font-size:0.85rem; font-weight:600; color:var(--pink-deep); margin-bottom:4px;">Preparación:</p>
+                        <p style="font-size:0.83rem; color:var(--text-muted);">${r.pasoss}</p>
+                    </div>
+                `;
+            });
+        }
+
+        function applyRecipeScaler() {
+            let orig = parseFloat(document.getElementById('scale-orig').value) || 1;
+            let target = parseFloat(document.getElementById('scale-target').value) || 1;
+            let ratio = target / orig;
+            alert(`Factor multiplicador: x${ratio.toFixed(2)}. Multiplica cada ingrediente de tu receta por ${ratio.toFixed(2)}.`);
+        }
+
+        // INSUMOS
+        function renderInsumos() {
+            const container = document.getElementById('lista-insumos');
+            container.innerHTML = '';
+
+            db.insumos.forEach(i => {
+                let isLow = i.stock <= i.minStock;
+                container.innerHTML += `
+                    <div class="list-item">
+                        <div>
+                            <div class="list-item-title">${i.nombre} ${isLow ? '<span class="badge badge-warning">⚠️ STOCK BAJO</span>' : ''}</div>
+                            <div class="list-item-sub">Disponible: ${i.stock} ${i.unidad} | Mínimo: ${i.minStock} ${i.unidad}</div>
+                        </div>
+                        <strong style="color:var(--pink-deep); font-size:0.9rem;">$${i.precio}</strong>
+                    </div>
+                `;
+            });
+        }
+
+        // CLIENTES
+        function renderClients() {
+            const container = document.getElementById('lista-clientes');
+            container.innerHTML = '';
+
+            db.clientes.forEach(c => {
+                let waUrl = `https://wa.me/${c.telefono}`;
+                container.innerHTML += `
+                    <div class="card">
+                        <div class="card-header">
+                            <span class="card-title">${c.nombre}</span>
+                            <a href="${waUrl}" target="_blank" class="btn-whatsapp"><i class="fa-brands fa-whatsapp"></i> Chat</a>
+                        </div>
+                        <p style="font-size:0.85rem; color:var(--text-muted);">📷 Inst: ${c.instagram || 'N/A'}</p>
+                        <p style="font-size:0.85rem; color:var(--text-muted); margin-top:4px;">📝 ${c.notas || 'Sin notas'}</p>
+                    </div>
+                `;
+            });
+        }
+
+        // CALCULATOR ENGINE
+        let ingredientRowCount = 0;
+        function addCalcIngredientRow() {
+            ingredientRowCount++;
+            const div = document.createElement('div');
+            div.className = 'form-row';
+            div.style.marginBottom = '8px';
+            div.id = `ing-row-${ingredientRowCount}`;
+            div.innerHTML = `
+                <input type="text" placeholder="Ingrediente" class="form-control" style="flex:2;">
+                <input type="number" placeholder="Precio Comprado" class="form-control ing-price calc-trigger" style="flex:1.5;">
+                <input type="number" placeholder="Cant. Comprada" class="form-control ing-buy-qty calc-trigger" style="flex:1.5;">
+                <input type="number" placeholder="Cant. Usada" class="form-control ing-use-qty calc-trigger" style="flex:1.5;">
+            `;
+            document.getElementById('calc-ingredients-list').appendChild(div);
+
+            div.querySelectorAll('.calc-trigger').forEach(input => {
+                input.addEventListener('input', calculateTotalCost);
+            });
+        }
+
+        function calculateTotalCost() {
+            let totalIngredients = 0;
+            const rows = document.querySelectorAll('#calc-ingredients-list .form-row');
+            rows.forEach(row => {
+                let price = parseFloat(row.querySelector('.ing-price')?.value) || 0;
+                let buyQty = parseFloat(row.querySelector('.ing-buy-qty')?.value) || 1;
+                let useQty = parseFloat(row.querySelector('.ing-use-qty')?.value) || 0;
+                totalIngredients += (price / buyQty) * useQty;
+            });
+
+            let packaging = parseFloat(document.getElementById('cost-packaging').value) || 0;
+            let decoracion = parseFloat(document.getElementById('cost-decoracion').value) || 0;
+            let etiquetas = parseFloat(document.getElementById('cost-etiquetas').value) || 0;
+            let otros = parseFloat(document.getElementById('cost-otros').value) || 0;
+
+            let totalCost = totalIngredients + packaging + decoracion + etiquetas + otros;
+            let margenPct = parseFloat(document.getElementById('calc-margen-pct').value) || 0;
+
+            let sugerido = totalCost * (1 + (margenPct / 100));
+            let ganancia = sugerido - totalCost;
+
+            document.getElementById('res-costo-total').innerText = '$' + Math.round(totalCost).toLocaleString('es-AR');
+            document.getElementById('res-precio-sugerido').innerText = '$' + Math.round(sugerido).toLocaleString('es-AR');
+            document.getElementById('res-ganancia-estimada').innerText = '$' + Math.round(ganancia).toLocaleString('es-AR');
+        }
+
+        function saveCostCalculationAsProduct() {
+            let name = document.getElementById('calc-prod-name').value || 'Nuevo Producto Calcu';
+            let costText = document.getElementById('res-costo-total').innerText.replace('$','').replace('.','');
+            let sugeridoText = document.getElementById('res-precio-sugerido').innerText.replace('$','').replace('.','');
+
+            let costo = parseFloat(costText) || 0;
+            let precio = parseFloat(sugeridoText) || 0;
+            let ganancia = precio - costo;
+            let pct = costo > 0 ? ((ganancia / precio) * 100).toFixed(1) : 0;
+
+            let newProd = {
+                id: Date.now(),
+                nombre: name,
+                categoria: 'Otros',
+                costo: costo,
+                precio: precio,
+                ganancia: ganancia,
+                pct: pct,
+                desc: 'Guardado automáticamente desde Calculadora'
+            };
+
+            db.productos.push(newProd);
+            saveStorage('productos', db.productos);
+            alert('¡Producto guardado exitosamente!');
+            switchView('productos');
+        }
+
+        // MODAL HELPERS & FORMS
+        function closeModal() {
+            document.getElementById('generic-modal').classList.remove('active');
+        }
+
+        function openProductModal() {
+            document.getElementById('modal-title').innerText = 'Nuevo Producto';
+            document.getElementById('modal-body').innerHTML = `
+                <form onsubmit="saveNewProduct(event)">
+                    <div class="form-group">
+                        <label>Nombre del Producto</label>
+                        <input type="text" id="p-nombre" class="form-control" required placeholder="Ej. Torta Temática">
+                    </div>
+                    <div class="form-group">
+                        <label>Categoría</label>
+                        <select id="p-cat" class="form-control">
+                            <option>Tortas</option>
+                            <option>Mini cakes</option>
+                            <option>Cheesecakes</option>
+                            <option>Cookies</option>
+                            <option>Cake pops</option>
+                            <option>Donas</option>
+                            <option>Budines</option>
+                            <option>Box</option>
+                            <option>Mesa dulce</option>
+                            <option>Postres</option>
+                            <option>Otros</option>
+                        </select>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Costo ($)</label>
+                            <input type="number" id="p-costo" class="form-control" required placeholder="1500">
+                        </div>
+                        <div class="form-group">
+                            <label>Precio Venta ($)</label>
+                            <input type="number" id="p-precio" class="form-control" required placeholder="4000">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Descripción / Observaciones</label>
+                        <textarea id="p-desc" class="form-control" rows="2"></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Guardar Producto</button>
+                </form>
+            `;
+            document.getElementById('generic-modal').classList.add('active');
+        }
+
+        function saveNewProduct(e) {
+            e.preventDefault();
+            let costo = parseFloat(document.getElementById('p-costo').value);
+            let precio = parseFloat(document.getElementById('p-precio').value);
+            let ganancia = precio - costo;
+            let pct = ((ganancia / precio) * 100).toFixed(1);
+
+            let prod = {
+                id: Date.now(),
+                nombre: document.getElementById('p-nombre').value,
+                categoria: document.getElementById('p-cat').value,
+                costo: costo,
+                precio: precio,
+                ganancia: ganancia,
+                pct: pct,
+                desc: document.getElementById('p-desc').value
+            };
+
+            db.productos.push(prod);
+            saveStorage('productos', db.productos);
+            closeModal();
+            renderProducts();
+        }
+
+        function openOrderModal() {
+            document.getElementById('modal-title').innerText = 'Nuevo Pedido';
+            document.getElementById('modal-body').innerHTML = `
+                <form onsubmit="saveNewOrder(event)">
+                    <div class="form-group">
+                        <label>Nombre del Cliente</label>
+                        <input type="text" id="ord-cliente" class="form-control" required placeholder="Sofía Rossi">
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono WhatsApp</label>
+                        <input type="tel" id="ord-tel" class="form-control" required placeholder="5493510000000">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Fecha Entrega</label>
+                            <input type="date" id="ord-fecha" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Hora Entrega</label>
+                            <input type="time" id="ord-hora" class="form-control" required>
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Productos</label>
+                        <input type="text" id="ord-prods" class="form-control" required placeholder="Ej. 1x Mini Cake Rosa">
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Total ($)</label>
+                            <input type="number" id="ord-total" class="form-control" required placeholder="10000" oninput="calcOrderSaldo()">
+                        </div>
+                        <div class="form-group">
+                            <label>Seña ($)</label>
+                            <input type="number" id="ord-sena" class="form-control" required value="0" oninput="calcOrderSaldo()">
+                        </div>
+                    </div>
+                    <div class="form-group">
+                        <label>Notas Especiales</label>
+                        <input type="text" id="ord-notas" class="form-control" placeholder="Temática, sin gluten, etc.">
+                    </div>
+                    <button class="btn btn-primary" type="submit">Registrar Pedido</button>
+                </form>
+            `;
+            document.getElementById('generic-modal').classList.add('active');
+        }
+
+        function calcOrderSaldo() {
+            let total = parseFloat(document.getElementById('ord-total').value) || 0;
+            let sena = parseFloat(document.getElementById('ord-sena').value) || 0;
+        }
+
+        function saveNewOrder(e) {
+            e.preventDefault();
+            let total = parseFloat(document.getElementById('ord-total').value) || 0;
+            let sena = parseFloat(document.getElementById('ord-sena').value) || 0;
+            let saldo = total - sena;
+
+            let ord = {
+                id: Date.now(),
+                cliente: document.getElementById('ord-cliente').value,
+                telefono: document.getElementById('ord-tel').value,
+                fecha: document.getElementById('ord-fecha').value,
+                hora: document.getElementById('ord-hora').value,
+                productos: document.getElementById('ord-prods').value,
+                total: total,
+                sena: sena,
+                saldo: saldo,
+                pago: 'Efectivo/Transf',
+                estado: 'Pendiente',
+                notas: document.getElementById('ord-notas').value
+            };
+
+            db.pedidos.push(ord);
+            saveStorage('pedidos', db.pedidos);
+            closeModal();
+            renderOrders();
+            renderCalendar();
+            renderDashboard();
+        }
+
+        function changeOrderStatus(orderId) {
+            let ord = db.pedidos.find(p => p.id === orderId);
+            if (!ord) return;
+
+            const states = ['Pendiente', 'En preparación', 'Listo', 'Entregado', 'Cancelado'];
+            let nextIndex = (states.indexOf(ord.estado) + 1) % states.length;
+            ord.estado = states[nextIndex];
+
+            saveStorage('pedidos', db.pedidos);
+            renderOrders();
+            renderDashboard();
+        }
+
+        function openClientModal() {
+            document.getElementById('modal-title').innerText = 'Nuevo Cliente';
+            document.getElementById('modal-body').innerHTML = `
+                <form onsubmit="saveNewClient(event)">
+                    <div class="form-group">
+                        <label>Nombre Completo</label>
+                        <input type="text" id="c-nombre" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Teléfono (WhatsApp)</label>
+                        <input type="tel" id="c-tel" class="form-control" required placeholder="549351...">
+                    </div>
+                    <div class="form-group">
+                        <label>Instagram</label>
+                        <input type="text" id="c-inst" class="form-control" placeholder="@usuario">
+                    </div>
+                    <div class="form-group">
+                        <label>Notas</label>
+                        <textarea id="c-notas" class="form-control" rows="2"></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Guardar Cliente</button>
+                </form>
+            `;
+            document.getElementById('generic-modal').classList.add('active');
+        }
+
+        function saveNewClient(e) {
+            e.preventDefault();
+            db.clientes.push({
+                id: Date.now(),
+                nombre: document.getElementById('c-nombre').value,
+                telefono: document.getElementById('c-tel').value,
+                instagram: document.getElementById('c-inst').value,
+                notas: document.getElementById('c-notas').value
+            });
+            saveStorage('clientes', db.clientes);
+            closeModal();
+            renderClients();
+        }
+
+        function openRecipeModal() {
+            document.getElementById('modal-title').innerText = 'Nueva Receta';
+            document.getElementById('modal-body').innerHTML = `
+                <form onsubmit="saveNewRecipe(event)">
+                    <div class="form-group">
+                        <label>Nombre de la Receta</label>
+                        <input type="text" id="r-nombre" class="form-control" required>
+                    </div>
+                    <div class="form-group">
+                        <label>Rinde (porciones/unidades)</label>
+                        <input type="number" id="r-rinde" class="form-control" required value="10">
+                    </div>
+                    <div class="form-group">
+                        <label>Ingredientes</label>
+                        <textarea id="r-ing" class="form-control" rows="3" placeholder="200g harina, 100g azúcar..."></textarea>
+                    </div>
+                    <div class="form-group">
+                        <label>Procedimiento</label>
+                        <textarea id="r-pasos" class="form-control" rows="3"></textarea>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Guardar Receta</button>
+                </form>
+            `;
+            document.getElementById('generic-modal').classList.add('active');
+        }
+
+        function saveNewRecipe(e) {
+            e.preventDefault();
+            db.recetas.push({
+                id: Date.now(),
+                nombre: document.getElementById('r-nombre').value,
+                rinde: document.getElementById('r-rinde').value,
+                ingredienteList: document.getElementById('r-ing').value,
+                pasoss: document.getElementById('r-pasos').value
+            });
+            saveStorage('recetas', db.recetas);
+            closeModal();
+            renderRecipes();
+        }
+
+        function openInsumoModal() {
+            document.getElementById('modal-title').innerText = 'Nuevo Insumo';
+            document.getElementById('modal-body').innerHTML = `
+                <form onsubmit="saveNewInsumo(event)">
+                    <div class="form-group">
+                        <label>Nombre del Insumo</label>
+                        <input type="text" id="i-nombre" class="form-control" required>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Stock Actual</label>
+                            <input type="number" id="i-stock" class="form-control" required>
+                        </div>
+                        <div class="form-group">
+                            <label>Unidad</label>
+                            <input type="text" id="i-unidad" class="form-control" placeholder="kg, gr, u">
+                        </div>
+                    </div>
+                    <div class="form-row">
+                        <div class="form-group">
+                            <label>Stock Mínimo</label>
+                            <input type="number" id="i-min" class="form-control" value="2">
+                        </div>
+                        <div class="form-group">
+                            <label>Precio ($)</label>
+                            <input type="number" id="i-precio" class="form-control">
+                        </div>
+                    </div>
+                    <button class="btn btn-primary" type="submit">Guardar Insumo</button>
+                </form>
+            `;
+            document.getElementById('generic-modal').classList.add('active');
+        }
+
+        function saveNewInsumo(e) {
+            e.preventDefault();
+            db.insumos.push({
+                id: Date.now(),
+                nombre: document.getElementById('i-nombre').value,
+                stock: parseFloat(document.getElementById('i-stock').value),
+                unidad: document.getElementById('i-unidad').value,
+                minStock: parseFloat(document.getElementById('i-min').value),
+                precio: parseFloat(document.getElementById('i-precio').value)
+            });
+            saveStorage('insumos', db.insumos);
+            closeModal();
+            renderInsumos();
+        }
+
+        // ANALYTICS CHART RENDERER
+        let chartInstance = null;
+        function renderAnalytics() {
+            document.getElementById('stat-total-pedidos').innerText = db.pedidos.length;
+            document.getElementById('stat-pedidos-entregados').innerText = db.pedidos.filter(p => p.estado === 'Entregado').length;
+            
+            let pendienteTotal = db.pedidos.reduce((sum, p) => sum + Number(p.saldo), 0);
+            document.getElementById('stat-pendiente-cobro').innerText = '$' + pendienteTotal.toLocaleString('es-AR');
+
+            const ctx = document.getElementById('chartGanancias').getContext('2d');
+            if (chartInstance) chartInstance.destroy();
+
+            chartInstance = new Chart(ctx, {
+                type: 'bar',
+                data: {
+                    labels: db.productos.map(p => p.nombre),
+                    datasets: [{
+                        label: 'Precio Venta ($)',
+                        data: db.productos.map(p => p.precio),
+                        backgroundColor: '#f48fb1'
+                    }, {
+                        label: 'Ganancia Estimada ($)',
+                        data: db.productos.map(p => p.ganancia),
+                        backgroundColor: '#d81b60'
+                    }]
+                },
+                options: {
+                    responsive: true,
+                    maintainAspectRatio: false,
+                    plugins: { legend: { position: 'bottom' } }
+                }
+            });
+        }
+
+        // BACKUP & RESTORE
+        function exportBackupData() {
+            const dataStr = "data:text/json;charset=utf-8," + encodeURIComponent(JSON.stringify(db, null, 2));
+            const dlAnchor = document.createElement('a');
+            dlAnchor.setAttribute("href", dataStr);
+            dlAnchor.setAttribute("download", `noe_reposteria_backup_${new Date().toISOString().slice(0,10)}.json`);
+            document.body.appendChild(dlAnchor);
+            dlAnchor.click();
+            dlAnchor.remove();
+        }
+
+        function importBackupData(event) {
+            const fileReader = new FileReader();
+            fileReader.onload = function(e) {
+                try {
+                    const imported = JSON.parse(e.target.result);
+                    if (imported.productos && imported.pedidos) {
+                        db = imported;
+                        Object.keys(db).forEach(k => saveStorage(k, db[k]));
+                        alert('¡Copia de seguridad restaurada con éxito!');
+                        renderDashboard();
+                    } else {
+                        alert('El archivo no tiene el formato correcto.');
+                    }
+                } catch(err) {
+                    alert('Error al leer el archivo de backup.');
+                }
+            };
+            fileReader.readAsText(event.target.files[0]);
+        }
+
+        // INITIALIZE ON LOAD
+        window.addEventListener('load', () => {
+            addCalcIngredientRow();
+            calculateTotalCost();
+            renderDashboard();
+
+            // Service Worker Registration for PWA support
+            if ('serviceWorker' in navigator) {
+                navigator.serviceWorker.register('sw.js').catch(err => console.log('SW registration skipped:', err));
+            }
+        });
+    </script>
+</body>
+</html>

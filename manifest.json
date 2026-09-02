@@ -1,0 +1,21 @@
+{
+  "short_name": "NoeReposter\u00eda",
+  "name": "Noe M\u00e1rquez Reposter\u00eda Creativa",
+  "icons": [
+    {
+      "src": "icon-192.png",
+      "type": "image/png",
+      "sizes": "192x192"
+    },
+    {
+      "src": "icon-512.png",
+      "type": "image/png",
+      "sizes": "512x512"
+    }
+  ],
+  "start_url": "index.html",
+  "background_color": "#fffafc",
+  "theme_color": "#fff5f7",
+  "display": "standalone",
+  "orientation": "portrait"
+}
